@@ -5,3 +5,4 @@
 - [x] To download `Image` created `ImagesloadingModal` where `Dictionary` is used to  `Cache` downloaded images 
 - [x] To hande multiple Image downloading used `OperationQueue`. 
 - [x] Used Dependency Injection in all modal, router and `PhotosVC`. 
+- [ ] Test cases implementation. 
