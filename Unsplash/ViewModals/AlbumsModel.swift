@@ -9,8 +9,9 @@ import Foundation
 import Combine
 
 class AlbumsModel: ObservableObject {
-    let router: EndPointConfiguration
     @Published var items = albums()
+    private var currentAlbums = albums()
+    private let router: EndPointConfiguration
     private var cancellable: AnyCancellable?
     
     init(route: EndPointConfiguration = AlbumsRouter()) {
@@ -31,7 +32,15 @@ class AlbumsModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] (albums) in
                 self?.items = albums
+                self?.currentAlbums = albums
             })
+    }
+    
+    func filterAlbums(for searchText: String) -> albums {
+        return currentAlbums.filter {
+            return $0.title.lowercased().contains(searchText.lowercased())
+        }
+
     }
     
     func fetch() -> AnyPublisher<albums, Error> {

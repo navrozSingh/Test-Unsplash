@@ -10,10 +10,15 @@ import UIKit
 import Combine
 
 final class PhotosVC: UIViewController {
-    
     let viewModal: PhotosViewModal
     let imageModel = ImagesloadingModal()
     private var cancellable = Set<AnyCancellable>()
+    
+    private struct Constants {
+        static let title = "Photos"
+        static let cellID = "ImageCell"
+    }
+
 
     //MARK: Initialization
     init?(coder: NSCoder, viewModal: PhotosViewModal) {
@@ -36,6 +41,8 @@ final class PhotosVC: UIViewController {
     }
     
     func setupUI() {
+        self.title = Constants.title
+        navigationItem.largeTitleDisplayMode = .never
         self.view = photosTableView
         photosTableView.dataSource = self
         photosTableView.delegate = self
@@ -49,7 +56,9 @@ final class PhotosVC: UIViewController {
         imageModel.$refreshIndex.sink { [weak self] index in
             guard let index = index,
                   let self = self
-            else { return }
+            else {
+                return
+            }
             DispatchQueue.main.async {
                 self.photosTableView.reloadRows(at: [index], with: .middle)
             }
@@ -70,7 +79,7 @@ extension PhotosVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ImageCell") as? ImageCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellID) as? ImageCell
         else {
             fatalError("Cell not configured")
         }

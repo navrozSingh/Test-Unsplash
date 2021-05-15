@@ -9,13 +9,23 @@ import UIKit
 import Combine
 
 class ViewController: UIViewController {
+    
+    private struct Constants {
+        static let title = "All Albums"
+        static let cellID = "albumCell"
+        static let searchPlaceholder = "Search Albums"
+    }
     //Model
     private let albumsModel = AlbumsModel()
     private var cancellable: AnyCancellable?
     
     //UI
-    let albumTableView: UITableView = {
+    private let searchController = UISearchController(searchResultsController: nil)
+
+    lazy var albumTableView: UITableView = {
         let tableView = UITableView()
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "albumCell")
         return tableView
     }()
@@ -26,6 +36,12 @@ class ViewController: UIViewController {
         }
     }
     
+    var filteredAlbums = albums() {
+        didSet {
+            albumTableView.reloadData()
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -34,9 +50,18 @@ class ViewController: UIViewController {
     }
     
     private func uiSetup() {
+        navigationSetup()
         self.view = albumTableView
-        albumTableView.dataSource = self
-        albumTableView.delegate = self
+    }
+    private func navigationSetup() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        self.title = Constants.title
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = Constants.searchPlaceholder
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+
     }
     
     private func bindVM() {
@@ -46,23 +71,44 @@ class ViewController: UIViewController {
     }
     
 }
+extension ViewController: UISearchResultsUpdating {
+    var isSearchBarEmpty: Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+
+    var isFiltering: Bool {
+        return searchController.isActive && !isSearchBarEmpty
+    }
+
+    func updateSearchResults(for searchController: UISearchController) {
+        guard
+            isSearchBarEmpty == false,
+            let searchText = searchController.searchBar.text
+        else {
+            return
+        }
+        filteredAlbums = albumsModel.filterAlbums(for: searchText)
+    }
+}
+
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        latestAlbums.count
+        return isFiltering ? filteredAlbums.count : latestAlbums.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "albumCell")
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: Constants.cellID)
         cell.accessoryType = .disclosureIndicator
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
-        cell.textLabel?.text = latestAlbums[indexPath.row].title
-        cell.detailTextLabel?.text = latestAlbums[indexPath.row].collaboratedDetails()
+        let modal = isFiltering ? filteredAlbums[indexPath.row] : latestAlbums[indexPath.row]
+        cell.textLabel?.text = modal.title
+        cell.detailTextLabel?.text = modal.collaboratedDetails()
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedAlbum = latestAlbums[indexPath.row]
+        let selectedAlbum = isFiltering ? filteredAlbums[indexPath.row] : latestAlbums[indexPath.row]
         
         guard let vc = storyboard?.instantiateViewController(identifier: "PhotosVC", creator: { coder in
             let route = PhotosRouter(album: selectedAlbum)

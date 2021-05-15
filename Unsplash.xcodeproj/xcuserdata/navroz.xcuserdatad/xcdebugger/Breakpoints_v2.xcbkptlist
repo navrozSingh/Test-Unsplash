@@ -100,5 +100,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BED023D3-4BB9-4DFE-86D2-AD750CCDD5CF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Unsplash/ViewModals/AlbumsModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
+            landmarkName = "filterAlbums(for:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "BED023D3-4BB9-4DFE-86D2-AD750CCDD5CF - ed91036d7e466c5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Unsplash.AlbumsModel.filterAlbums(for: Swift.String) -&gt; Swift.Array&lt;Unsplash.Album&gt;"
+                  moduleName = "Unsplash"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/navroz/Unsplash/Unsplash/ViewModals/AlbumsModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "40"
+                  endingLineNumber = "40"
+                  offsetFromSymbolStart = "46">
+               </Location>
+               <Location
+                  uuid = "BED023D3-4BB9-4DFE-86D2-AD750CCDD5CF - 1c7b501d8f8e4997"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Unsplash.Album) -&gt; Swift.Bool in Unsplash.AlbumsModel.filterAlbums(for: Swift.String) -&gt; Swift.Array&lt;Unsplash.Album&gt;"
+                  moduleName = "Unsplash"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/navroz/Unsplash/Unsplash/ViewModals/AlbumsModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "52">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
